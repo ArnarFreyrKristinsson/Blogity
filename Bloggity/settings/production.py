@@ -54,6 +54,7 @@ LOGGING = {
 ALLOWED_HOSTS = [
     "staging.arnarfreyr.is",
     "arnarfreyr.is",
+    "blogity.arnarfreyr.is",
     "localhost",
     "blogity.onrender.com",
     "blogity-production.onrender.com",

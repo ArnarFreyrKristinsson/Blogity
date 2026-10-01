@@ -1,14 +1,12 @@
-# User-Generated Content Management API
+# Overview
 
-This API provides a comprehensive platform for managing user-generated content, 
-tailored specifically for applications that involve creation, update, and deletion 
-of posts and comments initially intended for a blog site, but after a realization, it's actually multipurpose.
+A RESTful API built with the Django REST framework for managing user-generated content through posts and comments. This API supports typical blog or forum-style interactions, where anyone can read content, and only authenticated users can contribute where users can only modify their own content.
 
-This platform is designed to facilitate community interactions without the need 
-for authentication to view content, making it perfect for open forums, 
-comment sections, and social apps.
+Designed to support public content viewing, user registration, and secure content modification using JWT-based authentication.
 
-Access the API [here](https://arnarfreyr.is/api/)
+**Note:** The API is stored on an instance that needs some time to spin up to save costs. 
+
+Feel free to access the [API](https://arnarfreyr.is/api/)
 
 # Table of contents
 
@@ -24,11 +22,12 @@ Access the API [here](https://arnarfreyr.is/api/)
 
 ## Features
 
-- **Public Content Viewing:** All posts and comments are publicly visible without the need for authentication.
-- **Secure User Registration:** Users can register to the platform to contribute to the content.
-- **Token-based Authentication:** Actions such as posting, updating, and deleting content are secured with JWT authentication.
-- **CRUD Operations:** Full support for creating, reading, updating, and deleting content through standard HTTP methods.
-- **Swagger UI Documentation:** Interactive API documentation provided via Swagger UI for real-time testing and endpoint exploration.
+- **Public Content Viewing:** Posts and comments are readable without authentication.
+- **User Registration** New users can be created by anyone and passwords are hashed.
+- **JWT User Login** Users log in with credentials and receive a signed JWT for authenticated access.
+- **Token-based Authentication:** All write operations require a valid access token obtained at login; tokens are used to secure user-specific actions.
+- **CRUD Operations:** Standard REST support for creating, reading, updating and deleting posts and comments with access restricted to content owners.
+- **Swagger UI Documentation:**  Swagger UI provided for live endpoint testing
 
 ## Local installation
 
