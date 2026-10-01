@@ -32,3 +32,17 @@
 **/values.dev.yaml
 LICENSE
 README.md
+
+# Local virtualenvs: built for the host OS, never valid inside the image.
+venv
+BlogityVenv
+**/Lib
+**/Scripts
+**/pyvenv.cfg
+
+# Tool caches, logs and test artifacts.
+**/.mypy_cache
+**/.pytest_cache
+**/.ruff_cache
+**/*.log
+.coverage

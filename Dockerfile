@@ -1,4 +1,5 @@
-FROM alpine:latest
+# Pinned to the Python version the project targets (see .github/workflows).
+FROM python:3.11-alpine
 
 LABEL maintainer="arnarfkr@gmail.com"
 
@@ -10,23 +11,23 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PATH="/venv/bin:$PATH" \
 DJANGO_SETTINGS_MODULE=Bloggity.settings.production
 
-# Installing Python
-RUN apk update && apk add --no-cache python3 \
-&& apk add --no-cache py3-pip && python3 -m venv /venv && \
-# Installing dependencies for Postgres
-apk add --no-cache libpq-dev && \
-apk add --no-cache gcc && \
-apk add --no-cache python3-dev && \
-apk add --no-cache postgresql-dev && \
-apk add --no-cache musl-dev && \
-apk add --no-cache tzdata
+# Runtime libraries: libpq for psycopg2, tzdata for timezone support.
+RUN apk add --no-cache libpq tzdata && python3 -m venv /venv
+
+# Copied on its own so the dependency layer is cached across source changes.
+COPY requirements.txt ./
+
+# The toolchain needed to build psycopg2 is installed as a virtual package and
+# dropped again once the wheels are in place, so it stays out of the image.
+RUN apk add --no-cache --virtual .build-deps gcc musl-dev libpq-dev && \
+pip install --no-cache-dir gunicorn && \
+pip install --no-cache-dir --requirement ./requirements.txt && \
+apk del .build-deps
 
 # Copy the source code into the container.
 COPY . .
 
-RUN chmod +x /app/docker-runserver.sh
-
-RUN pip install gunicorn && pip install --requirement ./requirements.txt && \
+RUN chmod +x /app/docker-runserver.sh && \
 addgroup -S appgroup && adduser -S appuser -G appgroup && chown -R appuser:appgroup /app
 
 EXPOSE 8080
